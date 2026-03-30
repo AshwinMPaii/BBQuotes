@@ -15,3 +15,12 @@ struct BBQuotesApp: App {
         }
     }
 }
+
+/*
+ 1) Add elcamino tab
+ 2) Utilize all character images
+ 3) scroll to bottom in character view
+ 4) fetch episode data
+ 5) Extend string to get rid of long images
+ 6) Create static constants for show names
+ */

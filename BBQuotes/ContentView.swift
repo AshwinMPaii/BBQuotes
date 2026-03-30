@@ -12,15 +12,27 @@ struct ContentView: View {
     
     var body: some View {
         TabView {
+            
+            //MARK: Breaking Bad Tab
             Tab("Breaking Bad", systemImage: "tortoise") {
                 QuoteView(show: "Breaking Bad")
                     //.toolbarBackgroundVisibility(.visible, for: .tabBar)
             }
+            
+            //MARK: Better Call Saul Tab
             Tab("Better call saul", systemImage: "briefcase") {
                 QuoteView(show: "Better Call Saul")
                     //.toolbarBackgroundVisibility(.visible, for: .tabBar)
                 
             }
+            
+            //MARK:
+            Tab("El Camino", systemImage: "car") {
+                QuoteView(show: "El Camino")
+                //.toolbarBackgroundVisibility(.visible, for: .tabBar)
+                
+            }
+
             
         }
 //        .task {

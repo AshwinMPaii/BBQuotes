@@ -40,7 +40,7 @@ struct QuoteView: View {
                             
                             ZStack(alignment: .bottom) {
                                 AsyncImage(
-                                    url: vm.character.images[0]) { image in
+                                    url: vm.character.images[1]) { image in
                                         image
                                             .resizable()
                                             .scaledToFill()
