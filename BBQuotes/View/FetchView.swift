@@ -40,7 +40,7 @@ struct FetchView: View {
                             
                             ZStack(alignment: .bottom) {
                                 AsyncImage(
-                                    url: vm.character.images[0]) { image in
+                                    url: vm.character.images.randomElement()) { image in
                                         image
                                             .resizable()
                                             .scaledToFill()
@@ -64,6 +64,10 @@ struct FetchView: View {
                         case .successEpisode:
                             EpisodeView(episode: vm.episode)
                             
+                        case .successCharacter:
+                            randomCharacterView(character: vm.randomCharacter, show: show, vm: vm)
+                            
+                            
                         case .failure(let error):
                             Text(error.localizedDescription)
                             
@@ -72,32 +76,52 @@ struct FetchView: View {
                         Spacer(minLength: 20)
 
                     }
-                    HStack {
+                    HStack(spacing: 12) {
                         Button {
                             Task {
                                 await vm.getQuoteData(from: show)
                             }
                         } label: {
-                            Text("Get Random Quote")
+                            Text("Get Quote")
                                 .font(.title3)
                                 .foregroundStyle(.white)
                                 .padding()
+                                //.frame(maxWidth: .infinity)
                                 .background(Color("\(show.removeSpaces())Button"))
                                 .clipShape(.rect(cornerRadius: 10))
                                 .shadow(color: Color("\(show.removeSpaces())Shadow"), radius: 2)
                         }
+                        
+                        //Spacer()
+                        
+                        Button {
+                            Task {
+                                await vm.getCharacterData(from: show)
+                            }
+                        } label: {
+                            Text("Get Character")
+                                .font(.title3)
+                                .foregroundStyle(.white)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(Color("\(show.removeSpaces())Button"))
+                                .clipShape(.rect(cornerRadius: 10))
+                                .shadow(color: Color("\(show.removeSpaces())Shadow"), radius: 2)
+                                
+                        }
 
-                        Spacer()
+                        //Spacer()
                         
                         Button {
                             Task {
                                 await vm.getEpisodeData(from: show)
                             }
                         } label: {
-                            Text("Get Random Episode")
+                            Text("Get Episode")
                                 .font(.title3)
                                 .foregroundStyle(.white)
                                 .padding()
+                                //.frame(maxWidth: .infinity)
                                 .background(Color("\(show.removeSpaces())Button"))
                                 .clipShape(.rect(cornerRadius: 10))
                                 .shadow(color: Color("\(show.removeSpaces())Shadow"), radius: 2)
@@ -111,6 +135,9 @@ struct FetchView: View {
             .frame(width: geo.size.width, height: geo.size.height)
         }
         .ignoresSafeArea()
+        .task {
+            await vm.getQuoteData(from: show)
+        }
         .fullScreenCover(isPresented: $showCharacterInfo) {
             CharacterView(character: vm.character, show: show)
         }

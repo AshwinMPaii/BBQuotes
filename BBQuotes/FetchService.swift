@@ -93,4 +93,40 @@ struct FetchService {
         //return quote
         return episodes.randomElement()
     }
+    
+    func fetchCharacterFromShow(from show: String) async throws -> Char {
+        let characterFromShowURL = baseURL.appending(path: "characters/random")
+        let fetchURL = characterFromShowURL.appending(queryItems:[URLQueryItem(name: "production", value: show)])
+        //fetch the data
+        let (data, response) = try await URLSession.shared.data(from: fetchURL)
+        
+        //handle the response
+        guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+            throw fetchError.badResponse
+        }
+        
+        //decode the data
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        
+        let character = try decoder.decode(Char.self, from: data)
+        return character
+    }
+    
+    func fetchQuoteForCharacter(for char: String) async throws -> Quote {
+        let quoteForCharacterURL = baseURL.appending(path: "quotes/random")
+        let fetchURL = quoteForCharacterURL.appending(queryItems: [URLQueryItem(name: "character", value: char)])
+        
+        let (data, response) = try await URLSession.shared.data(from: fetchURL)
+        
+        guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+            throw fetchError.badResponse
+        }
+        
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        
+        let quoteFromCharacter = try decoder.decode(Quote.self, from: data)
+        return quoteFromCharacter
+    }
 }
